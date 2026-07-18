@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Voir le Monde</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -22,24 +23,20 @@
   .login-box {
     background: var(--card); border: 1px solid var(--border); border-radius: 16px;
     padding: 48px 40px; text-align: center; max-width: 400px; width: 100%;
+    position: relative; overflow: hidden;
+  }
+  .login-box::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
   }
   .login-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
   .login-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
   .login-title em { font-style: italic; color: var(--gold-light); }
-  .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
-  .pwd-input {
-    width: 100%; padding: 14px 18px; border-radius: 30px;
-    border: 1px solid var(--border); background: #0d0f14; color: var(--text);
-    font-size: 15px; margin-bottom: 12px; outline: none; text-align: center;
-  }
-  .pwd-input:focus { border-color: var(--gold); }
-  .pwd-btn {
-    width: 100%; padding: 14px; border-radius: 30px; border: none;
-    background: var(--gold); color: #0d0f14; font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: opacity 0.15s;
-  }
-  .pwd-btn:hover { opacity: 0.85; }
-  .login-error { font-size: 12px; color: #fca5a5; margin-top: 12px; display: none; }
+  .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 40px; }
+  .login-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .login-error { font-size: 12px; color: #fca5a5; margin-top: 16px; display: none; }
+  #google-btn { display: flex; justify-content: center; }
 
   .app { display: none; }
 
@@ -61,12 +58,12 @@
 
   .top-bar {
     background: rgba(13,15,20,0.95); border-bottom: 1px solid var(--border);
-    padding: 10px 24px; display: flex; align-items: center; justify-content: flex-end;
+    padding: 10px 24px; display: flex; align-items: center; justify-content: flex-end; gap: 12px;
   }
+  .user-name { font-size: 12px; color: var(--muted); }
   .logout-btn {
     font-size: 11px; padding: 4px 12px; border-radius: 12px;
-    border: 1px solid var(--border); background: transparent; color: var(--muted);
-    cursor: pointer;
+    border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer;
   }
   .logout-btn:hover { border-color: var(--gold); color: var(--gold); }
 
@@ -153,15 +150,16 @@
   <div class="login-box">
     <div class="login-eyebrow">Accès privé</div>
     <div class="login-title">Voir le <em>Monde</em></div>
-    <p class="login-sub">Entre ton mot de passe pour accéder.</p>
-    <input class="pwd-input" type="password" id="pwd-input" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkPwd()">
-    <button class="pwd-btn" onclick="checkPwd()">Accéder →</button>
-    <p class="login-error" id="login-error">Mot de passe incorrect.</p>
+    <p class="login-sub">Connecte-toi avec ton compte Google pour accéder à tes événements.</p>
+    <hr class="login-divider">
+    <div id="google-btn"></div>
+    <p class="login-error" id="login-error">Accès non autorisé.</p>
   </div>
 </div>
 
 <div class="app" id="app">
   <div class="top-bar">
+    <span class="user-name" id="user-name"></span>
     <button class="logout-btn" onclick="logout()">Déconnexion</button>
   </div>
   <div class="hero">
@@ -185,9 +183,11 @@
 </div>
 
 <script>
-const PASSWORD = 'bain';
+const CLIENT_ID = '941520303022-3b8rdj6697jmch7o66lgte9shc6ia1au.apps.googleusercontent.com';
+const ALLOWED_EMAIL = 'atlan.raphael@gmail.com';
 const SHEET_ID = '1g5ktsw_kXhqXKa1DDD8Q_cCODGss2vUMh1y15bh9LVs';
-const STORAGE_KEY = 'vlm_auth_v1';
+const COOKIE_NAME = 'vlm_user';
+const COOKIE_DAYS = 365;
 
 const ACCENTS = {
   fr:'#3b82f6',es:'#ef4444',pt:'#16a34a',be:'#f59e0b',
@@ -237,27 +237,65 @@ const DATA = [
   {pays:'Roumanie',drapeau:'🇷🇴',code_pays:'ro',ville:'Bucarest',titre:'Untold Festival',description:"400 000 festivaliers - l'un des plus grands d'Europe de l'Est",dates:'6 - 9 août 2026',lien:'https://untoldfestival.com',saison:'été'},
 ];
 
-function checkPwd() {
-  const val = document.getElementById('pwd-input').value;
-  if (val === PASSWORD) {
-    localStorage.setItem(STORAGE_KEY, '1');
-    showApp();
-  } else {
-    document.getElementById('login-error').style.display = 'block';
+// Cookie helpers
+function setCookie(name, value, days) {
+  const d = new Date();
+  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+}
+function getCookie(name) {
+  const ca = document.cookie.split(';');
+  for (let c of ca) {
+    c = c.trim();
+    if (c.startsWith(name + '=')) return decodeURIComponent(c.substring(name.length + 1));
   }
+  return null;
+}
+function deleteCookie(name) {
+  document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
 }
 
-function showApp() {
+function handleCredentialResponse(response) {
+  const payload = JSON.parse(atob(response.credential.split('.')[1]));
+  if (payload.email !== ALLOWED_EMAIL) {
+    document.getElementById('login-error').style.display = 'block';
+    return;
+  }
+  setCookie(COOKIE_NAME, payload.name, COOKIE_DAYS);
+  showApp(payload.name);
+}
+
+function showApp(name) {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
+  document.getElementById('user-name').textContent = name;
   buildPage(DATA, 'données locales');
   loadFromSheet();
 }
 
 function logout() {
-  localStorage.removeItem(STORAGE_KEY);
+  deleteCookie(COOKIE_NAME);
+  google.accounts.id.disableAutoSelect();
   location.reload();
 }
+
+// Init
+window.addEventListener('load', function() {
+  const saved = getCookie(COOKIE_NAME);
+  if (saved) {
+    showApp(saved);
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: CLIENT_ID,
+    callback: handleCredentialResponse,
+    auto_select: true,
+  });
+  google.accounts.id.renderButton(document.getElementById('google-btn'), {
+    theme: 'filled_black', size: 'large', text: 'signin_with', shape: 'pill', width: 280
+  });
+  google.accounts.id.prompt();
+});
 
 function slugify(str) {
   return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
@@ -351,11 +389,6 @@ async function loadFromSheet() {
     } catch(e) { continue; }
   }
   btn.disabled = false; btn.textContent = '↻ Sync Google Sheet';
-}
-
-// Init
-if (localStorage.getItem(STORAGE_KEY) === '1') {
-  showApp();
 }
 </script>
 </body>
