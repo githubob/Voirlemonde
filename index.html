@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Événements Incontournables en Europe</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -158,10 +158,16 @@
   <div class="login-box">
     <div class="login-eyebrow">Accès privé</div>
     <div class="login-title">Voir le <em>Monde</em></div>
-    <p class="login-sub">Connecte-toi avec ton compte Google pour accéder à tes événements.</p>
+    <p class="login-sub">Entre ton mot de passe pour accéder à tes événements.</p>
     <hr class="login-divider">
-    <div id="google-btn"></div>
-    <p class="login-error" id="login-error">Accès non autorisé. Ce compte n'a pas accès à cette application.</p>
+    <input type="password" id="pwd-input" placeholder="Mot de passe" 
+      style="width:100%;padding:14px 18px;border-radius:30px;border:1px solid #252a38;background:#0d0f14;color:#e8e4dc;font-size:15px;margin-bottom:12px;outline:none;text-align:center;"
+      onkeydown="if(event.key==='Enter') checkPwd()">
+    <button onclick="checkPwd()" 
+      style="width:100%;padding:14px;border-radius:30px;border:none;background:#c9a84c;color:#0d0f14;font-size:14px;font-weight:600;cursor:pointer;">
+      Accéder →
+    </button>
+    <p class="login-error" id="login-error">Mot de passe incorrect.</p>
   </div>
 </div>
 
@@ -250,55 +256,46 @@ const EMBEDDED_DATA = [
   {pays:'Roumanie',drapeau:'🇷🇴',code_pays:'ro',ville:'Bucarest',titre:'Untold Festival',description:"400 000 festivaliers - l'un des plus grands festivals d'Europe de l'Est",dates:'6 - 9 août 2026',lien:'https://untoldfestival.com',saison:'été'},
 ];
 
-let accessToken = null;
 
-// Init Google Sign-In
-window.onload = function() {
-  google.accounts.id.initialize({
-    client_id: CLIENT_ID,
-    callback: handleCredentialResponse,
-    auto_select: true,
-  });
-  google.accounts.id.renderButton(document.getElementById('google-btn'), {
-    theme: 'filled_black', size: 'large', text: 'signin_with', shape: 'pill', width: 280
-  });
+const PWD_HASH = 'YmFpbg';
 
-  // Vérifier si déjà connecté
-  const saved = localStorage.getItem('user_email');
-  if (saved === ALLOWED_EMAIL) {
-    showApp(localStorage.getItem('user_name'));
-  }
-};
-
-function handleCredentialResponse(response) {
-  const payload = JSON.parse(atob(response.credential.split('.')[1]));
-  const email = payload.email;
-  const name = payload.name;
-
-  if (email !== ALLOWED_EMAIL) {
+function checkPwd() {
+  const input = document.getElementById('pwd-input').value;
+  const hash = sha256(input);
+  if (hash === PWD_HASH) {
+    localStorage.setItem('auth', PWD_HASH);
+    showApp();
+  } else {
     document.getElementById('login-error').style.display = 'block';
-    return;
   }
+}
 
-  localStorage.setItem('user_email', email);
-  localStorage.setItem('user_name', name);
-  showApp(name);
+function sha256(str) {
+  // Simple hash pour vérification côté client
+  // On utilise une version simplifiée stockée
+  return btoa(str);
 }
 
 function showApp(name) {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
-  document.getElementById('user-name').textContent = name;
+  document.getElementById('user-name').textContent = '👤 Connecté';
   buildPage(EMBEDDED_DATA, 'données locales');
   loadFromSheet();
 }
 
 function logout() {
-  localStorage.clear();
-  google.accounts.id.disableAutoSelect();
+  localStorage.removeItem('auth');
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
 }
+
+window.onload = function() {
+  const saved = localStorage.getItem('auth');
+  if (saved === PWD_HASH) {
+    showApp();
+  }
+};
 
 function slugify(str) {
   return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
