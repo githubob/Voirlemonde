@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Événements Incontournables en Europe</title>
+<title>Voir le Monde</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -15,7 +14,6 @@
   html { scroll-behavior: smooth; }
   body { background: var(--night); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; }
 
-  /* LOGIN SCREEN */
   .login-screen {
     min-height: 100vh; display: flex; align-items: center; justify-content: center;
     background: linear-gradient(160deg, #0d0f14 0%, #1a1428 50%, #0d1520 100%);
@@ -24,50 +22,51 @@
   .login-box {
     background: var(--card); border: 1px solid var(--border); border-radius: 16px;
     padding: 48px 40px; text-align: center; max-width: 400px; width: 100%;
-    position: relative; overflow: hidden;
-  }
-  .login-box::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 70%);
-    pointer-events: none;
   }
   .login-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
   .login-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
   .login-title em { font-style: italic; color: var(--gold-light); }
-  .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 40px; line-height: 1.6; }
-  .login-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
-  .login-error { font-size: 12px; color: #fca5a5; margin-top: 16px; display: none; }
-  #google-btn { display: flex; justify-content: center; }
+  .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+  .pwd-input {
+    width: 100%; padding: 14px 18px; border-radius: 30px;
+    border: 1px solid var(--border); background: #0d0f14; color: var(--text);
+    font-size: 15px; margin-bottom: 12px; outline: none; text-align: center;
+  }
+  .pwd-input:focus { border-color: var(--gold); }
+  .pwd-btn {
+    width: 100%; padding: 14px; border-radius: 30px; border: none;
+    background: var(--gold); color: #0d0f14; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .pwd-btn:hover { opacity: 0.85; }
+  .login-error { font-size: 12px; color: #fca5a5; margin-top: 12px; display: none; }
 
-  /* APP */
   .app { display: none; }
 
   .hero {
     background: linear-gradient(160deg, #0d0f14 0%, #1a1428 50%, #0d1520 100%);
-    padding: 80px 24px 60px; text-align: center; border-bottom: 1px solid var(--border); position: relative; overflow: hidden;
+    padding: 80px 24px 60px; text-align: center; border-bottom: 1px solid var(--border); position: relative;
   }
   .hero::before {
     content: ''; position: absolute; inset: 0;
     background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%); pointer-events: none;
   }
   .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
-  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 72px); font-weight: 700; line-height: 1.1; color: var(--text); max-width: 800px; margin: 0 auto 16px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 72px); font-weight: 700; line-height: 1.1; max-width: 800px; margin: 0 auto 16px; }
   .hero h1 em { font-style: italic; color: var(--gold-light); }
-  .hero-sub { color: var(--muted); font-size: 15px; font-weight: 300; max-width: 500px; margin: 0 auto; }
+  .hero-sub { color: var(--muted); font-size: 15px; max-width: 500px; margin: 0 auto; }
   .hero-stats { display: flex; justify-content: center; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
-  .stat { text-align: center; }
   .stat-n { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--gold); line-height: 1; }
   .stat-l { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-top: 4px; }
 
-  .user-bar {
+  .top-bar {
     background: rgba(13,15,20,0.95); border-bottom: 1px solid var(--border);
-    padding: 10px 24px; display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+    padding: 10px 24px; display: flex; align-items: center; justify-content: flex-end;
   }
-  .user-name { font-size: 12px; color: var(--muted); }
   .logout-btn {
     font-size: 11px; padding: 4px 12px; border-radius: 12px;
     border: 1px solid var(--border); background: transparent; color: var(--muted);
-    cursor: pointer; transition: all 0.15s;
+    cursor: pointer;
   }
   .logout-btn:hover { border-color: var(--gold); color: var(--gold); }
 
@@ -80,8 +79,8 @@
   .country-nav-inner { display: flex; gap: 4px; padding: 12px 24px; min-width: max-content; }
   .nav-pill {
     padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
-    cursor: pointer; border: 1px solid var(--border); background: transparent;
-    color: var(--muted); text-decoration: none; transition: all 0.15s; white-space: nowrap;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--muted); text-decoration: none; white-space: nowrap;
   }
   .nav-pill:hover { border-color: var(--gold); color: var(--gold); }
 
@@ -96,10 +95,8 @@
   .sync-info span { color: var(--gold); }
   .sync-btn {
     padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;
-    border: 1px solid var(--gold); background: transparent; color: var(--gold);
-    cursor: pointer; transition: all 0.15s;
+    border: 1px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer;
   }
-  .sync-btn:hover { background: rgba(201,168,76,0.1); }
   .sync-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
   .country-section { margin-bottom: 64px; }
@@ -107,7 +104,7 @@
     display: flex; align-items: center; gap: 14px;
     margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
   }
-  .country-flag { font-size: 28px; line-height: 1; }
+  .country-flag { font-size: 28px; }
   .country-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; }
   .country-count { margin-left: auto; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
 
@@ -125,18 +122,17 @@
   }
   .event-card:hover { border-color: rgba(201,168,76,0.3); background: #1e2330; transform: translateX(2px); }
   .event-card:hover::before { opacity: 1; }
-  .event-left { min-width: 0; }
   .event-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
   .event-city { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; }
-  .event-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
-  .event-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .event-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); }
+  .event-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
   .event-desc { font-size: 13px; color: var(--muted); font-weight: 300; }
   .event-right { text-align: right; flex-shrink: 0; }
-  .event-date { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; }
+  .event-date { font-size: 13px; font-weight: 600; white-space: nowrap; }
   .event-link-icon { display: inline-block; margin-top: 8px; font-size: 18px; opacity: 0.3; transition: opacity 0.15s; }
   .event-card:hover .event-link-icon { opacity: 0.9; }
 
-  .season-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  .season-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; text-transform: uppercase; }
   .badge-été { background: rgba(251,191,36,0.12); color: #fbbf24; }
   .badge-automne { background: rgba(234,88,12,0.12); color: #ea580c; }
   .badge-hiver { background: rgba(96,165,250,0.12); color: #60a5fa; }
@@ -153,31 +149,21 @@
 </head>
 <body>
 
-<!-- ÉCRAN DE LOGIN -->
 <div class="login-screen" id="login-screen">
   <div class="login-box">
     <div class="login-eyebrow">Accès privé</div>
     <div class="login-title">Voir le <em>Monde</em></div>
-    <p class="login-sub">Entre ton mot de passe pour accéder à tes événements.</p>
-    <hr class="login-divider">
-    <input type="password" id="pwd-input" placeholder="Mot de passe" 
-      style="width:100%;padding:14px 18px;border-radius:30px;border:1px solid #252a38;background:#0d0f14;color:#e8e4dc;font-size:15px;margin-bottom:12px;outline:none;text-align:center;"
-      onkeydown="if(event.key==='Enter') checkPwd()">
-    <button onclick="checkPwd()" 
-      style="width:100%;padding:14px;border-radius:30px;border:none;background:#c9a84c;color:#0d0f14;font-size:14px;font-weight:600;cursor:pointer;">
-      Accéder →
-    </button>
+    <p class="login-sub">Entre ton mot de passe pour accéder.</p>
+    <input class="pwd-input" type="password" id="pwd-input" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkPwd()">
+    <button class="pwd-btn" onclick="checkPwd()">Accéder →</button>
     <p class="login-error" id="login-error">Mot de passe incorrect.</p>
   </div>
 </div>
 
-<!-- APPLICATION -->
 <div class="app" id="app">
-  <div class="user-bar">
-    <span class="user-name" id="user-name"></span>
+  <div class="top-bar">
     <button class="logout-btn" onclick="logout()">Déconnexion</button>
   </div>
-
   <div class="hero">
     <div class="hero-eyebrow">Guide Personnel</div>
     <h1>Événements <em>Incontournables</em> en Europe</h1>
@@ -187,11 +173,7 @@
       <div class="stat"><div class="stat-n" id="stat-events">-</div><div class="stat-l">Événements</div></div>
     </div>
   </div>
-
-  <nav class="country-nav">
-    <div class="country-nav-inner" id="nav-pills"></div>
-  </nav>
-
+  <nav class="country-nav"><div class="country-nav-inner" id="nav-pills"></div></nav>
   <main>
     <div class="sync-bar">
       <div class="sync-info">Données : <span id="sync-status">chargement...</span></div>
@@ -199,37 +181,36 @@
     </div>
     <div id="main-content"></div>
   </main>
-
   <footer>Événements incontournables en Europe · <span id="last-updated"></span></footer>
 </div>
 
 <script>
-const CLIENT_ID = '941520303022-3b8rdj6697jmch7o66lgte9shc6ia1au.apps.googleusercontent.com';
+const PASSWORD = 'bain';
 const SHEET_ID = '1g5ktsw_kXhqXKa1DDD8Q_cCODGss2vUMh1y15bh9LVs';
-const ALLOWED_EMAIL = 'atlan.raphael@gmail.com';
+const STORAGE_KEY = 'vlm_auth_v1';
 
 const ACCENTS = {
-  fr:'#3b82f6', es:'#ef4444', pt:'#16a34a', be:'#f59e0b',
-  de:'#6366f1', cz:'#06b6d4', gb:'#ec4899', ie:'#22c55e',
-  nl:'#f97316', hr:'#8b5cf6', it:'#10b981', hu:'#ef4444',
-  fi:'#3b82f6', ro:'#f59e0b'
+  fr:'#3b82f6',es:'#ef4444',pt:'#16a34a',be:'#f59e0b',
+  de:'#6366f1',cz:'#06b6d4',gb:'#ec4899',ie:'#22c55e',
+  nl:'#f97316',hr:'#8b5cf6',it:'#10b981',hu:'#ef4444',
+  fi:'#3b82f6',ro:'#f59e0b'
 };
 
-const EMBEDDED_DATA = [
+const DATA = [
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Nîmes',titre:'Festival de Nîmes',description:'Sting, Lorde, Nick Cave, The Cure - concerts aux Arènes romaines',dates:'11 juin - 26 juil. 2026',lien:'https://festivaldenimes.com',saison:'été'},
-  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Avignon',titre:"Festival d'Avignon",description:'80e édition - le plus grand festival de théâtre au monde - Palais des Papes',dates:'4 - 26 juil. 2026',lien:'https://festival-avignon.com',saison:'été'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Avignon',titre:"Festival d'Avignon",description:'80e édition - le plus grand festival de théâtre au monde',dates:'4 - 26 juil. 2026',lien:'https://festival-avignon.com',saison:'été'},
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Bayonne',titre:'Fêtes de Bayonne',description:'Blanc et rouge - bandas - corridas - 5 nuits sans sommeil',dates:'15 - 19 juil. 2026',lien:'https://fetes.bayonne.fr',saison:'été'},
-  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Lorient',titre:'Festival Interceltique',description:'800 000 personnes - 10 nations celtes - Cornouailles invitée',dates:'31 juil. - 9 août 2026',lien:'https://www.festival-interceltique.bzh',saison:'été'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Lorient',titre:'Festival Interceltique',description:'800 000 personnes - 10 nations celtes',dates:'31 juil. - 9 août 2026',lien:'https://www.festival-interceltique.bzh',saison:'été'},
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Paris - Montmartre',titre:'Fête des Vendanges de Montmartre',description:'93e édition - défilé - dégustations - concerts dans les rues du 18e',dates:'7 - 11 oct. 2026',lien:'https://www.fetedesvendangesdemontmartre.com',saison:'automne'},
-  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Lyon',titre:'Festival Lumière',description:'Le plus grand festival de cinéma classique au monde - Prix Lumière aux frères Coen',dates:'10 - 18 oct. 2026',lien:'https://www.festival-lumiere.org',saison:'automne'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Lyon',titre:'Festival Lumière',description:'Le plus grand festival de cinéma classique au monde',dates:'10 - 18 oct. 2026',lien:'https://www.festival-lumiere.org',saison:'automne'},
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Rennes',titre:'Trans Musicales de Rennes',description:'Le festival qui a lancé Nirvana - Björk et Daft Punk',dates:'2 - 6 déc. 2026',lien:'https://www.lestrans.com',saison:'hiver'},
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Strasbourg',titre:'Marché de Noël Christkindelsmärik',description:'Depuis 1570 - le plus ancien marché de Noël de France',dates:'28 nov. - 24 déc. 2026',lien:'https://noel.strasbourg.eu',saison:'hiver'},
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Lyon',titre:'Fête des Lumières',description:'3 millions de visiteurs en 4 nuits - installations lumineuses gratuites',dates:'5 - 8 déc. 2026',lien:'https://www.fetedeslumieres.lyon.fr',saison:'hiver'},
-  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Limoux',titre:'Carnaval de Limoux',description:"Le plus long carnaval au monde (400 ans) - 3 sorties/jour sous les arcades médiévales",dates:'mi-jan. - fin mars 2027 (tous les week-ends)',lien:'https://www.limouxin-tourisme.com',saison:'hiver'},
-  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Nice',titre:'Carnaval de Nice',description:"L'un des 3 plus grands carnavals au monde - batailles de fleurs - chars géants",dates:'fév. 2027',lien:'https://www.nicecarnaval.com',saison:'hiver'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Limoux',titre:'Carnaval de Limoux',description:'Le plus long carnaval au monde - 3 sorties/jour sous les arcades médiévales',dates:'mi-jan. - fin mars 2027 (tous les week-ends)',lien:'https://www.limouxin-tourisme.com',saison:'hiver'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Nice',titre:'Carnaval de Nice',description:"L'un des 3 plus grands carnavals au monde - batailles de fleurs",dates:'fév. 2027',lien:'https://www.nicecarnaval.com',saison:'hiver'},
   {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Pampelune',titre:'San Fermín',description:'Encierros quotidiens - foulards rouges - 3 millions de visiteurs',dates:'6 - 14 juil. 2026',lien:'https://www.sanfermin.com',saison:'été'},
   {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Buñol',titre:'La Tomatina',description:'La plus grande bataille de nourriture au monde - 150 tonnes de tomates',dates:'26 août 2026',lien:'https://www.latomatina.info',saison:'été'},
-  {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Séville',titre:'Bienal de Flamenco',description:'Le plus grand événement flamenco au monde - 72 spectacles (tous les 2 ans)',dates:'9 sept. - 3 oct. 2026',lien:'https://www.labienal.com',saison:'automne'},
+  {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Séville',titre:'Bienal de Flamenco',description:'Le plus grand événement flamenco au monde (tous les 2 ans)',dates:'9 sept. - 3 oct. 2026',lien:'https://www.labienal.com',saison:'automne'},
   {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Barcelone',titre:'La Mercè',description:'500 activités gratuites - correfoc - castellers - Piromusical à Font Màgica',dates:'23 - 27 sept. 2026',lien:'https://barcelona.cat/lamerce',saison:'automne'},
   {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Valence',titre:'Las Fallas',description:'Patrimoine UNESCO - géants en papier mâché brûlés dans les rues',dates:'15 - 19 mars 2027',lien:'https://www.visitvalencia.com',saison:'printemps'},
   {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Alicante',titre:'Hogueras de San Juan',description:'Bûchers monumentaux de 20 mètres - nuit de feu',dates:'20 - 24 juin 2027',lien:'https://www.alicanteturismo.com',saison:'été'},
@@ -237,8 +218,8 @@ const EMBEDDED_DATA = [
   {pays:'Portugal',drapeau:'🇵🇹',code_pays:'pt',ville:'Porto',titre:'Festa de São João',description:"La nuit la plus folle de l'année - sardines - marteaux - feux d'artifice sur le Douro",dates:'23 - 24 juin 2027',lien:'https://www.visitporto.travel',saison:'été'},
   {pays:'Belgique',drapeau:'🇧🇪',code_pays:'be',ville:'Boom',titre:'Tomorrowland',description:'Le festival électronique le plus iconique au monde',dates:'17-19 et 24-26 juil. 2026',lien:'https://www.tomorrowland.com',saison:'été'},
   {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Munich',titre:'Oktoberfest',description:'La plus grande fête populaire au monde - 6 millions de visiteurs',dates:'19 sept. - 4 oct. 2026',lien:'https://www.oktoberfest.de',saison:'automne'},
-  {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Nuremberg',titre:'Christkindlesmarkt',description:'Le marché de Noël le plus célèbre au monde - depuis le XVIe siècle',dates:'27 nov. - 24 déc. 2026',lien:'https://www.christkindlesmarkt.de',saison:'hiver'},
-  {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Cologne',titre:'Karneval de Cologne',description:"1 million de personnes dans les rues - le plus grand carnaval d'Allemagne",dates:'4 - 10 fév. 2027',lien:'https://www.cologne-tourism.com/experiences-lifestyle/carnival',saison:'hiver'},
+  {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Nuremberg',titre:'Christkindlesmarkt',description:'Le marché de Noël le plus célèbre au monde',dates:'27 nov. - 24 déc. 2026',lien:'https://www.christkindlesmarkt.de',saison:'hiver'},
+  {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Cologne',titre:'Karneval de Cologne',description:"1 million de personnes dans les rues",dates:'4 - 10 fév. 2027',lien:'https://www.cologne-tourism.com/experiences-lifestyle/carnival',saison:'hiver'},
   {pays:'République tchèque',drapeau:'🇨🇿',code_pays:'cz',ville:'Prague',titre:'Marché de Noël de la Vieille Ville',description:"L'un des plus beaux marchés de Noël d'Europe",dates:'28 nov. 2026 - 6 jan. 2027',lien:'https://www.pragueexperience.com/events/christmas-markets.asp',saison:'hiver'},
   {pays:'Royaume-Uni',drapeau:'🇬🇧',code_pays:'gb',ville:'Édimbourg',titre:'Edinburgh Festival Fringe',description:"Le plus grand festival d'arts au monde - 3 600 spectacles",dates:'7 - 31 août 2026',lien:'https://www.edfringe.com',saison:'été'},
   {pays:'Royaume-Uni',drapeau:'🇬🇧',code_pays:'gb',ville:'Londres',titre:'Notting Hill Carnival',description:"Le plus grand carnaval d'Europe - 2 millions de personnes",dates:'30 - 31 août 2026',lien:'https://nhcarnival.org',saison:'été'},
@@ -252,50 +233,31 @@ const EMBEDDED_DATA = [
   {pays:'Italie',drapeau:'🇮🇹',code_pays:'it',ville:'Bergame',titre:'Bergamo Jazz Estate',description:'Dee Dee Bridgewater & Fatoumata Diawara au Lazaretto',dates:'2 - 18 juil. 2026',lien:'https://www.bergamojazz.org/en/',saison:'été'},
   {pays:'Italie',drapeau:'🇮🇹',code_pays:'it',ville:'Venise',titre:'Carnaval de Venise',description:"L'un des plus vieux et plus beaux carnavals au monde",dates:'30 jan. - 9 fév. 2027',lien:'https://carnevale.venezia.it/en/',saison:'hiver'},
   {pays:'Hongrie',drapeau:'🇭🇺',code_pays:'hu',ville:'Budapest',titre:'Sziget Festival',description:"L'île de la liberté - 550 000 festivaliers - 50 scènes",dates:'11 - 15 août 2026',lien:'https://szigetfestival.com',saison:'été'},
-  {pays:'Finlande',drapeau:'🇫🇮',code_pays:'fi',ville:'Helsinki',titre:'Helsinki Festival',description:'3 semaines de musique - danse - opéra et arts dans toute la ville',dates:'18 août - 5 sept. 2026',lien:'https://helsinkifestival.fi/en/',saison:'été'},
-  {pays:'Roumanie',drapeau:'🇷🇴',code_pays:'ro',ville:'Bucarest',titre:'Untold Festival',description:"400 000 festivaliers - l'un des plus grands festivals d'Europe de l'Est",dates:'6 - 9 août 2026',lien:'https://untoldfestival.com',saison:'été'},
+  {pays:'Finlande',drapeau:'🇫🇮',code_pays:'fi',ville:'Helsinki',titre:'Helsinki Festival',description:'3 semaines de musique - danse - opéra et arts',dates:'18 août - 5 sept. 2026',lien:'https://helsinkifestival.fi/en/',saison:'été'},
+  {pays:'Roumanie',drapeau:'🇷🇴',code_pays:'ro',ville:'Bucarest',titre:'Untold Festival',description:"400 000 festivaliers - l'un des plus grands d'Europe de l'Est",dates:'6 - 9 août 2026',lien:'https://untoldfestival.com',saison:'été'},
 ];
 
-
-const PWD_HASH = 'YmFpbg';
-
 function checkPwd() {
-  const input = document.getElementById('pwd-input').value;
-  const hash = sha256(input);
-  if (hash === PWD_HASH) {
-    localStorage.setItem('auth', PWD_HASH);
+  const val = document.getElementById('pwd-input').value;
+  if (val === PASSWORD) {
+    localStorage.setItem(STORAGE_KEY, '1');
     showApp();
   } else {
     document.getElementById('login-error').style.display = 'block';
   }
 }
 
-function sha256(str) {
-  // Simple hash pour vérification côté client
-  // On utilise une version simplifiée stockée
-  return btoa(str);
-}
-
-function showApp(name) {
+function showApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
-  document.getElementById('user-name').textContent = '👤 Connecté';
-  buildPage(EMBEDDED_DATA, 'données locales');
+  buildPage(DATA, 'données locales');
   loadFromSheet();
 }
 
 function logout() {
-  localStorage.removeItem('auth');
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
 }
-
-window.onload = function() {
-  const saved = localStorage.getItem('auth');
-  if (saved === PWD_HASH) {
-    showApp();
-  }
-};
 
 function slugify(str) {
   return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
@@ -305,13 +267,13 @@ function parseCSV(text) {
   const lines = text.trim().split('\n');
   const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
   return lines.slice(1).map(line => {
-    const values = []; let current = ''; let inQuotes = false;
+    const values = []; let cur = ''; let inQ = false;
     for (let i = 0; i < line.length; i++) {
-      if (line[i] === '"') { inQuotes = !inQuotes; }
-      else if (line[i] === ',' && !inQuotes) { values.push(current.trim()); current = ''; }
-      else { current += line[i]; }
+      if (line[i] === '"') { inQ = !inQ; }
+      else if (line[i] === ',' && !inQ) { values.push(cur.trim()); cur = ''; }
+      else { cur += line[i]; }
     }
-    values.push(current.trim());
+    values.push(cur.trim());
     const obj = {};
     headers.forEach((h,i) => obj[h] = (values[i]||'').replace(/^"|"$/g,'').trim());
     return obj;
@@ -320,63 +282,54 @@ function parseCSV(text) {
 
 function buildPage(rows, source) {
   const main = document.getElementById('main-content');
-  const navPills = document.getElementById('nav-pills');
-  main.innerHTML = ''; navPills.innerHTML = '';
-
-  const countries = {}; const countryOrder = [];
-  rows.forEach(row => {
-    const key = row.pays.trim();
-    if (!countries[key]) { countries[key] = []; countryOrder.push(key); }
-    countries[key].push(row);
+  const nav = document.getElementById('nav-pills');
+  main.innerHTML = ''; nav.innerHTML = '';
+  const countries = {}; const order = [];
+  rows.forEach(r => {
+    if (!countries[r.pays]) { countries[r.pays] = []; order.push(r.pays); }
+    countries[r.pays].push(r);
   });
-
-  document.getElementById('stat-pays').textContent = countryOrder.length;
+  document.getElementById('stat-pays').textContent = order.length;
   document.getElementById('stat-events').textContent = rows.length;
   document.getElementById('sync-status').textContent = source;
-  document.getElementById('last-updated').textContent = 'Mis à jour le ' + new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'});
-
-  countryOrder.forEach(pays => {
+  document.getElementById('last-updated').textContent = 'Mis à jour le ' + new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  order.forEach(pays => {
     const pill = document.createElement('a');
-    pill.className = 'nav-pill';
-    pill.href = '#' + slugify(pays);
+    pill.className = 'nav-pill'; pill.href = '#'+slugify(pays);
     pill.textContent = (countries[pays][0].drapeau||'') + ' ' + pays;
-    navPills.appendChild(pill);
+    nav.appendChild(pill);
   });
-
-  countryOrder.forEach(pays => {
+  order.forEach(pays => {
     const events = countries[pays];
-    const code = (events[0].code_pays||pays.slice(0,2)).toLowerCase();
-    const accent = ACCENTS[code] || '#c9a84c';
-    const section = document.createElement('section');
-    section.className = 'country-section';
-    section.id = slugify(pays);
-    section.innerHTML = `
+    const code = (events[0].code_pays||'').toLowerCase();
+    const accent = ACCENTS[code]||'#c9a84c';
+    const sec = document.createElement('section');
+    sec.className = 'country-section'; sec.id = slugify(pays);
+    sec.innerHTML = `
       <div class="country-header">
         <span class="country-flag">${events[0].drapeau||''}</span>
         <span class="country-name">${pays}</span>
         <span class="country-count">${events.length} événement${events.length>1?'s':''}</span>
       </div>
-      <div class="events-grid">
-        ${events.map(ev => {
-          const saison = (ev.saison||'').toLowerCase();
-          const href = ev.lien ? (ev.lien.startsWith('http') ? ev.lien : 'https://'+ev.lien) : '#';
-          return `<a class="event-card" href="${href}" target="_blank" style="--accent:${accent}">
-            <div class="event-left">
-              <div class="event-meta">
-                <span class="event-city" style="color:${accent}">${ev.ville||''}</span>
-                ${saison?`<span class="event-dot"></span><span class="season-badge badge-${saison}">${ev.saison}</span>`:''}
-              </div>
-              <div class="event-title">${ev.titre||''}</div>
-              <div class="event-desc">${ev.description||''}</div>
+      <div class="events-grid">${events.map(ev => {
+        const s = (ev.saison||'').toLowerCase();
+        const href = ev.lien?(ev.lien.startsWith('http')?ev.lien:'https://'+ev.lien):'#';
+        return `<a class="event-card" href="${href}" target="_blank" style="--accent:${accent}">
+          <div class="event-left">
+            <div class="event-meta">
+              <span class="event-city" style="color:${accent}">${ev.ville||''}</span>
+              ${s?`<span class="event-dot"></span><span class="season-badge badge-${s}">${ev.saison}</span>`:''}
             </div>
-            <div class="event-right">
-              <div class="event-date">${ev.dates||''}</div>
-              <div class="event-link-icon">→</div>
-            </div>
-          </a>`;
-        }).join('')}
-      </div>`;
-    main.appendChild(section);
+            <div class="event-title">${ev.titre||''}</div>
+            <div class="event-desc">${ev.description||''}</div>
+          </div>
+          <div class="event-right">
+            <div class="event-date">${ev.dates||''}</div>
+            <div class="event-link-icon">→</div>
+          </div>
+        </a>`;
+      }).join('')}</div>`;
+    main.appendChild(sec);
   });
 }
 
@@ -394,14 +347,15 @@ async function loadFromSheet() {
       const text = await res.text();
       if (!text.includes('pays')) continue;
       const rows = parseCSV(text);
-      if (rows.length > 0) {
-        buildPage(rows, '✓ Google Sheet (live)');
-        btn.disabled = false; btn.textContent = '↻ Sync Google Sheet';
-        return;
-      }
+      if (rows.length > 0) { buildPage(rows, '✓ Google Sheet (live)'); break; }
     } catch(e) { continue; }
   }
   btn.disabled = false; btn.textContent = '↻ Sync Google Sheet';
+}
+
+// Init
+if (localStorage.getItem(STORAGE_KEY) === '1') {
+  showApp();
 }
 </script>
 </body>
