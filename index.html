@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Événements Incontournables en Europe</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -13,6 +14,33 @@
   }
   html { scroll-behavior: smooth; }
   body { background: var(--night); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; }
+
+  /* LOGIN SCREEN */
+  .login-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #0d0f14 0%, #1a1428 50%, #0d1520 100%);
+    padding: 24px;
+  }
+  .login-box {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 48px 40px; text-align: center; max-width: 400px; width: 100%;
+    position: relative; overflow: hidden;
+  }
+  .login-box::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .login-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+  .login-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .login-title em { font-style: italic; color: var(--gold-light); }
+  .login-sub { font-size: 13px; color: var(--muted); margin-bottom: 40px; line-height: 1.6; }
+  .login-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .login-error { font-size: 12px; color: #fca5a5; margin-top: 16px; display: none; }
+  #google-btn { display: flex; justify-content: center; }
+
+  /* APP */
+  .app { display: none; }
 
   .hero {
     background: linear-gradient(160deg, #0d0f14 0%, #1a1428 50%, #0d1520 100%);
@@ -30,6 +58,18 @@
   .stat { text-align: center; }
   .stat-n { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--gold); line-height: 1; }
   .stat-l { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-top: 4px; }
+
+  .user-bar {
+    background: rgba(13,15,20,0.95); border-bottom: 1px solid var(--border);
+    padding: 10px 24px; display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+  }
+  .user-name { font-size: 12px; color: var(--muted); }
+  .logout-btn {
+    font-size: 11px; padding: 4px 12px; border-radius: 12px;
+    border: 1px solid var(--border); background: transparent; color: var(--muted);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .logout-btn:hover { border-color: var(--gold); color: var(--gold); }
 
   .country-nav {
     position: sticky; top: 0; z-index: 100;
@@ -57,7 +97,7 @@
   .sync-btn {
     padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;
     border: 1px solid var(--gold); background: transparent; color: var(--gold);
-    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    cursor: pointer; transition: all 0.15s;
   }
   .sync-btn:hover { background: rgba(201,168,76,0.1); }
   .sync-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -107,37 +147,61 @@
   @media (max-width: 600px) {
     .event-card { grid-template-columns: 1fr; }
     .event-right { text-align: left; }
+    .login-box { padding: 32px 24px; }
   }
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="hero-eyebrow">Guide Personnel</div>
-  <h1>Événements <em>Incontournables</em> en Europe</h1>
-  <p class="hero-sub">Les rendez-vous qui valent le voyage</p>
-  <div class="hero-stats">
-    <div class="stat"><div class="stat-n" id="stat-pays">-</div><div class="stat-l">Pays</div></div>
-    <div class="stat"><div class="stat-n" id="stat-events">-</div><div class="stat-l">Événements</div></div>
+<!-- ÉCRAN DE LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-eyebrow">Accès privé</div>
+    <div class="login-title">Voir le <em>Monde</em></div>
+    <p class="login-sub">Connecte-toi avec ton compte Google pour accéder à tes événements.</p>
+    <hr class="login-divider">
+    <div id="google-btn"></div>
+    <p class="login-error" id="login-error">Accès non autorisé. Ce compte n'a pas accès à cette application.</p>
   </div>
 </div>
 
-<nav class="country-nav">
-  <div class="country-nav-inner" id="nav-pills"></div>
-</nav>
-
-<main>
-  <div class="sync-bar">
-    <div class="sync-info">Données : <span id="sync-status">chargement...</span></div>
-    <button class="sync-btn" id="sync-btn" onclick="loadFromSheet()">↻ Sync Google Sheet</button>
+<!-- APPLICATION -->
+<div class="app" id="app">
+  <div class="user-bar">
+    <span class="user-name" id="user-name"></span>
+    <button class="logout-btn" onclick="logout()">Déconnexion</button>
   </div>
-  <div id="main-content"></div>
-</main>
 
-<footer>Événements incontournables en Europe · <span id="last-updated"></span></footer>
+  <div class="hero">
+    <div class="hero-eyebrow">Guide Personnel</div>
+    <h1>Événements <em>Incontournables</em> en Europe</h1>
+    <p class="hero-sub">Les rendez-vous qui valent le voyage</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n" id="stat-pays">-</div><div class="stat-l">Pays</div></div>
+      <div class="stat"><div class="stat-n" id="stat-events">-</div><div class="stat-l">Événements</div></div>
+    </div>
+  </div>
+
+  <nav class="country-nav">
+    <div class="country-nav-inner" id="nav-pills"></div>
+  </nav>
+
+  <main>
+    <div class="sync-bar">
+      <div class="sync-info">Données : <span id="sync-status">chargement...</span></div>
+      <button class="sync-btn" id="sync-btn" onclick="loadFromSheet()">↻ Sync Google Sheet</button>
+    </div>
+    <div id="main-content"></div>
+  </main>
+
+  <footer>Événements incontournables en Europe · <span id="last-updated"></span></footer>
+</div>
 
 <script>
+const CLIENT_ID = '941520303022-3b8rdj6697jmch7o66lgte9shc6ia1au.apps.googleusercontent.com';
 const SHEET_ID = '1g5ktsw_kXhqXKa1DDD8Q_cCODGss2vUMh1y15bh9LVs';
+const ALLOWED_EMAIL = 'atlan.raphael@gmail.com';
+
 const ACCENTS = {
   fr:'#3b82f6', es:'#ef4444', pt:'#16a34a', be:'#f59e0b',
   de:'#6366f1', cz:'#06b6d4', gb:'#ec4899', ie:'#22c55e',
@@ -145,7 +209,6 @@ const ACCENTS = {
   fi:'#3b82f6', ro:'#f59e0b'
 };
 
-// Données embarquées (fallback)
 const EMBEDDED_DATA = [
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Nîmes',titre:'Festival de Nîmes',description:'Sting, Lorde, Nick Cave, The Cure - concerts aux Arènes romaines',dates:'11 juin - 26 juil. 2026',lien:'https://festivaldenimes.com',saison:'été'},
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Avignon',titre:"Festival d'Avignon",description:'80e édition - le plus grand festival de théâtre au monde - Palais des Papes',dates:'4 - 26 juil. 2026',lien:'https://festival-avignon.com',saison:'été'},
@@ -156,6 +219,7 @@ const EMBEDDED_DATA = [
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Rennes',titre:'Trans Musicales de Rennes',description:'Le festival qui a lancé Nirvana - Björk et Daft Punk',dates:'2 - 6 déc. 2026',lien:'https://www.lestrans.com',saison:'hiver'},
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Strasbourg',titre:'Marché de Noël Christkindelsmärik',description:'Depuis 1570 - le plus ancien marché de Noël de France',dates:'28 nov. - 24 déc. 2026',lien:'https://noel.strasbourg.eu',saison:'hiver'},
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Lyon',titre:'Fête des Lumières',description:'3 millions de visiteurs en 4 nuits - installations lumineuses gratuites',dates:'5 - 8 déc. 2026',lien:'https://www.fetedeslumieres.lyon.fr',saison:'hiver'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Limoux',titre:'Carnaval de Limoux',description:"Le plus long carnaval au monde (400 ans) - 3 sorties/jour sous les arcades médiévales",dates:'mi-jan. - fin mars 2027 (tous les week-ends)',lien:'https://www.limouxin-tourisme.com',saison:'hiver'},
   {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Nice',titre:'Carnaval de Nice',description:"L'un des 3 plus grands carnavals au monde - batailles de fleurs - chars géants",dates:'fév. 2027',lien:'https://www.nicecarnaval.com',saison:'hiver'},
   {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Pampelune',titre:'San Fermín',description:'Encierros quotidiens - foulards rouges - 3 millions de visiteurs',dates:'6 - 14 juil. 2026',lien:'https://www.sanfermin.com',saison:'été'},
   {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Buñol',titre:'La Tomatina',description:'La plus grande bataille de nourriture au monde - 150 tonnes de tomates',dates:'26 août 2026',lien:'https://www.latomatina.info',saison:'été'},
@@ -164,13 +228,13 @@ const EMBEDDED_DATA = [
   {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Valence',titre:'Las Fallas',description:'Patrimoine UNESCO - géants en papier mâché brûlés dans les rues',dates:'15 - 19 mars 2027',lien:'https://www.visitvalencia.com',saison:'printemps'},
   {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Alicante',titre:'Hogueras de San Juan',description:'Bûchers monumentaux de 20 mètres - nuit de feu',dates:'20 - 24 juin 2027',lien:'https://www.alicanteturismo.com',saison:'été'},
   {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Grenade',titre:'Festival Internacional de Música y Danza',description:"Concerts dans l'Alhambra et le Généralife illuminés",dates:'fin juin 2027',lien:'https://granadafestival.org',saison:'été'},
-  {pays:'Portugal',drapeau:'🇵🇹',code_pays:'pt',ville:'Porto',titre:'Festa de São João',description:'La nuit la plus folle de l\'année - sardines - marteaux - feux d\'artifice sur le Douro',dates:'23 - 24 juin 2027',lien:'https://www.visitporto.travel',saison:'été'},
+  {pays:'Portugal',drapeau:'🇵🇹',code_pays:'pt',ville:'Porto',titre:'Festa de São João',description:"La nuit la plus folle de l'année - sardines - marteaux - feux d'artifice sur le Douro",dates:'23 - 24 juin 2027',lien:'https://www.visitporto.travel',saison:'été'},
   {pays:'Belgique',drapeau:'🇧🇪',code_pays:'be',ville:'Boom',titre:'Tomorrowland',description:'Le festival électronique le plus iconique au monde',dates:'17-19 et 24-26 juil. 2026',lien:'https://www.tomorrowland.com',saison:'été'},
   {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Munich',titre:'Oktoberfest',description:'La plus grande fête populaire au monde - 6 millions de visiteurs',dates:'19 sept. - 4 oct. 2026',lien:'https://www.oktoberfest.de',saison:'automne'},
   {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Nuremberg',titre:'Christkindlesmarkt',description:'Le marché de Noël le plus célèbre au monde - depuis le XVIe siècle',dates:'27 nov. - 24 déc. 2026',lien:'https://www.christkindlesmarkt.de',saison:'hiver'},
-  {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Cologne',titre:'Karneval de Cologne',description:'1 million de personnes dans les rues - le plus grand carnaval d\'Allemagne',dates:'4 - 10 fév. 2027',lien:'https://www.cologne-tourism.com/experiences-lifestyle/carnival',saison:'hiver'},
+  {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Cologne',titre:'Karneval de Cologne',description:"1 million de personnes dans les rues - le plus grand carnaval d'Allemagne",dates:'4 - 10 fév. 2027',lien:'https://www.cologne-tourism.com/experiences-lifestyle/carnival',saison:'hiver'},
   {pays:'République tchèque',drapeau:'🇨🇿',code_pays:'cz',ville:'Prague',titre:'Marché de Noël de la Vieille Ville',description:"L'un des plus beaux marchés de Noël d'Europe",dates:'28 nov. 2026 - 6 jan. 2027',lien:'https://www.pragueexperience.com/events/christmas-markets.asp',saison:'hiver'},
-  {pays:'Royaume-Uni',drapeau:'🇬🇧',code_pays:'gb',ville:'Édimbourg',titre:'Edinburgh Festival Fringe',description:'Le plus grand festival d\'arts au monde - 3 600 spectacles',dates:'7 - 31 août 2026',lien:'https://www.edfringe.com',saison:'été'},
+  {pays:'Royaume-Uni',drapeau:'🇬🇧',code_pays:'gb',ville:'Édimbourg',titre:'Edinburgh Festival Fringe',description:"Le plus grand festival d'arts au monde - 3 600 spectacles",dates:'7 - 31 août 2026',lien:'https://www.edfringe.com',saison:'été'},
   {pays:'Royaume-Uni',drapeau:'🇬🇧',code_pays:'gb',ville:'Londres',titre:'Notting Hill Carnival',description:"Le plus grand carnaval d'Europe - 2 millions de personnes",dates:'30 - 31 août 2026',lien:'https://nhcarnival.org',saison:'été'},
   {pays:'Royaume-Uni',drapeau:'🇬🇧',code_pays:'gb',ville:'Édimbourg',titre:'Hogmanay',description:'Le réveillon le plus iconique au monde - 45 000 personnes',dates:'29 déc. 2026 - 1 jan. 2027',lien:'https://edinburgh.org/festivals/edinburghs-hogmanay/',saison:'hiver'},
   {pays:'Irlande',drapeau:'🇮🇪',code_pays:'ie',ville:'Dublin',titre:"St. Patrick's Day",description:'Défilés - Guinness - tout le pays en vert',dates:'17 mars 2027',lien:'https://www.stpatricksfestival.ie',saison:'printemps'},
@@ -183,9 +247,58 @@ const EMBEDDED_DATA = [
   {pays:'Italie',drapeau:'🇮🇹',code_pays:'it',ville:'Venise',titre:'Carnaval de Venise',description:"L'un des plus vieux et plus beaux carnavals au monde",dates:'30 jan. - 9 fév. 2027',lien:'https://carnevale.venezia.it/en/',saison:'hiver'},
   {pays:'Hongrie',drapeau:'🇭🇺',code_pays:'hu',ville:'Budapest',titre:'Sziget Festival',description:"L'île de la liberté - 550 000 festivaliers - 50 scènes",dates:'11 - 15 août 2026',lien:'https://szigetfestival.com',saison:'été'},
   {pays:'Finlande',drapeau:'🇫🇮',code_pays:'fi',ville:'Helsinki',titre:'Helsinki Festival',description:'3 semaines de musique - danse - opéra et arts dans toute la ville',dates:'18 août - 5 sept. 2026',lien:'https://helsinkifestival.fi/en/',saison:'été'},
-  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Limoux',titre:'Carnaval de Limoux',description:"Le plus long carnaval au monde (400 ans) - 3 sorties/jour sous les arcades médiévales - Fécos et Goudils",dates:'mi-jan. - fin mars 2027 (tous les week-ends)',lien:'https://www.limouxin-tourisme.com',saison:'hiver'},
   {pays:'Roumanie',drapeau:'🇷🇴',code_pays:'ro',ville:'Bucarest',titre:'Untold Festival',description:"400 000 festivaliers - l'un des plus grands festivals d'Europe de l'Est",dates:'6 - 9 août 2026',lien:'https://untoldfestival.com',saison:'été'},
 ];
+
+let accessToken = null;
+
+// Init Google Sign-In
+window.onload = function() {
+  google.accounts.id.initialize({
+    client_id: CLIENT_ID,
+    callback: handleCredentialResponse,
+    auto_select: false,
+  });
+  google.accounts.id.renderButton(document.getElementById('google-btn'), {
+    theme: 'filled_black', size: 'large', text: 'signin_with', shape: 'pill', width: 280
+  });
+
+  // Vérifier si déjà connecté
+  const saved = sessionStorage.getItem('user_email');
+  if (saved === ALLOWED_EMAIL) {
+    showApp(sessionStorage.getItem('user_name'));
+  }
+};
+
+function handleCredentialResponse(response) {
+  const payload = JSON.parse(atob(response.credential.split('.')[1]));
+  const email = payload.email;
+  const name = payload.name;
+
+  if (email !== ALLOWED_EMAIL) {
+    document.getElementById('login-error').style.display = 'block';
+    return;
+  }
+
+  sessionStorage.setItem('user_email', email);
+  sessionStorage.setItem('user_name', name);
+  showApp(name);
+}
+
+function showApp(name) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('user-name').textContent = name;
+  buildPage(EMBEDDED_DATA, 'données locales');
+  loadFromSheet();
+}
+
+function logout() {
+  sessionStorage.clear();
+  google.accounts.id.disableAutoSelect();
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
 
 function slugify(str) {
   return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
@@ -237,7 +350,6 @@ function buildPage(rows, source) {
     const events = countries[pays];
     const code = (events[0].code_pays||pays.slice(0,2)).toLowerCase();
     const accent = ACCENTS[code] || '#c9a84c';
-
     const section = document.createElement('section');
     section.className = 'country-section';
     section.id = slugify(pays);
@@ -293,13 +405,7 @@ async function loadFromSheet() {
     } catch(e) { continue; }
   }
   btn.disabled = false; btn.textContent = '↻ Sync Google Sheet';
-  document.getElementById('sync-status').textContent = '⚠ Sheet inaccessible - données locales';
 }
-
-// Charger les données embarquées immédiatement
-buildPage(EMBEDDED_DATA, 'données locales');
-// Tenter la sync en arrière-plan
-loadFromSheet();
 </script>
 </body>
 </html>
