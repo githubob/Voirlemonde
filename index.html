@@ -264,9 +264,9 @@ window.onload = function() {
   });
 
   // Vérifier si déjà connecté
-  const saved = sessionStorage.getItem('user_email');
+  const saved = localStorage.getItem('user_email');
   if (saved === ALLOWED_EMAIL) {
-    showApp(sessionStorage.getItem('user_name'));
+    showApp(localStorage.getItem('user_name'));
   }
 };
 
@@ -280,8 +280,8 @@ function handleCredentialResponse(response) {
     return;
   }
 
-  sessionStorage.setItem('user_email', email);
-  sessionStorage.setItem('user_name', name);
+  localStorage.setItem('user_email', email);
+  localStorage.setItem('user_name', name);
   showApp(name);
 }
 
@@ -294,7 +294,7 @@ function showApp(name) {
 }
 
 function logout() {
-  sessionStorage.clear();
+  localStorage.clear();
   google.accounts.id.disableAutoSelect();
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
