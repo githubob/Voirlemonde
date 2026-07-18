@@ -8,7 +8,7 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --night: #0d0f14; --deep: #13161e; --card: #1a1e28; --border: #252a38;
+    --night: #0d0f14; --card: #1a1e28; --border: #252a38;
     --gold: #c9a84c; --gold-light: #e8c96d; --text: #e8e4dc; --muted: #7a8099;
   }
   html { scroll-behavior: smooth; }
@@ -47,41 +47,21 @@
 
   main { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
 
-  /* LOADING */
-  .loading {
-    text-align: center; padding: 80px 24px; color: var(--muted);
+  .sync-bar {
+    background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 10px; padding: 14px 20px; margin-bottom: 40px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
   }
-  .loading-spinner {
-    width: 36px; height: 36px; border: 2px solid var(--border);
-    border-top-color: var(--gold); border-radius: 50%;
-    animation: spin 0.8s linear infinite; margin: 0 auto 16px;
+  .sync-info { font-size: 13px; color: var(--muted); }
+  .sync-info span { color: var(--gold); }
+  .sync-btn {
+    padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    border: 1px solid var(--gold); background: transparent; color: var(--gold);
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .sync-btn:hover { background: rgba(201,168,76,0.1); }
+  .sync-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  /* ERROR */
-  .error-block {
-    background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
-    border-radius: 10px; padding: 24px; text-align: center; color: #fca5a5;
-  }
-  .error-block code { font-size: 12px; color: var(--muted); display: block; margin-top: 8px; }
-
-  /* CONFIG BANNER */
-  .config-banner {
-    background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.25);
-    border-radius: 10px; padding: 20px 24px; margin-bottom: 40px;
-    display: flex; align-items: flex-start; gap: 16px;
-  }
-  .config-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
-  .config-text { flex: 1; }
-  .config-text strong { color: var(--gold); display: block; margin-bottom: 4px; }
-  .config-text p { font-size: 13px; color: var(--muted); line-height: 1.5; }
-  .config-text code {
-    font-size: 11px; background: rgba(255,255,255,0.05);
-    padding: 2px 6px; border-radius: 4px; color: var(--gold-light);
-    word-break: break-all;
-  }
-
-  /* COUNTRY SECTIONS */
   .country-section { margin-bottom: 64px; }
   .country-header {
     display: flex; align-items: center; gap: 14px;
@@ -92,7 +72,6 @@
   .country-count { margin-left: auto; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
 
   .events-grid { display: grid; gap: 12px; }
-
   .event-card {
     background: var(--card); border: 1px solid var(--border); border-radius: 10px;
     padding: 20px 24px; display: grid; grid-template-columns: 1fr auto;
@@ -106,34 +85,22 @@
   }
   .event-card:hover { border-color: rgba(201,168,76,0.3); background: #1e2330; transform: translateX(2px); }
   .event-card:hover::before { opacity: 1; }
-
   .event-left { min-width: 0; }
   .event-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
   .event-city { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; }
   .event-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
   .event-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
   .event-desc { font-size: 13px; color: var(--muted); font-weight: 300; }
-
   .event-right { text-align: right; flex-shrink: 0; }
   .event-date { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; }
   .event-link-icon { display: inline-block; margin-top: 8px; font-size: 18px; opacity: 0.3; transition: opacity 0.15s; }
   .event-card:hover .event-link-icon { opacity: 0.9; }
 
-  .season-badge {
-    display: inline-block; padding: 2px 8px; border-radius: 4px;
-    font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-  }
-  .badge-été    { background: rgba(251,191,36,0.12);  color: #fbbf24; }
-  .badge-automne{ background: rgba(234,88,12,0.12);   color: #ea580c; }
-  .badge-hiver  { background: rgba(96,165,250,0.12);  color: #60a5fa; }
-  .badge-printemps{ background: rgba(34,197,94,0.12); color: #22c55e; }
-
-  /* Palette couleurs par pays */
-  .accent-fr { color: #3b82f6; } .accent-es { color: #ef4444; } .accent-pt { color: #16a34a; }
-  .accent-be { color: #f59e0b; } .accent-de { color: #6366f1; } .accent-cz { color: #06b6d4; }
-  .accent-gb { color: #ec4899; } .accent-ie { color: #22c55e; } .accent-nl { color: #f97316; }
-  .accent-hr { color: #8b5cf6; } .accent-it { color: #10b981; } .accent-hu { color: #ef4444; }
-  .accent-fi { color: #3b82f6; } .accent-ro { color: #f59e0b; }
+  .season-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+  .badge-été { background: rgba(251,191,36,0.12); color: #fbbf24; }
+  .badge-automne { background: rgba(234,88,12,0.12); color: #ea580c; }
+  .badge-hiver { background: rgba(96,165,250,0.12); color: #60a5fa; }
+  .badge-printemps { background: rgba(34,197,94,0.12); color: #22c55e; }
 
   footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; color: var(--muted); font-size: 12px; }
 
@@ -148,7 +115,7 @@
 <div class="hero">
   <div class="hero-eyebrow">Guide Personnel</div>
   <h1>Événements <em>Incontournables</em> en Europe</h1>
-  <p class="hero-sub">Les rendez-vous qui valent le voyage - mis à jour depuis Google Sheets</p>
+  <p class="hero-sub">Les rendez-vous qui valent le voyage</p>
   <div class="hero-stats">
     <div class="stat"><div class="stat-n" id="stat-pays">-</div><div class="stat-l">Pays</div></div>
     <div class="stat"><div class="stat-n" id="stat-events">-</div><div class="stat-l">Événements</div></div>
@@ -156,183 +123,182 @@
 </div>
 
 <nav class="country-nav">
-  <div class="country-nav-inner" id="nav-pills">
-    <!-- Généré dynamiquement -->
-  </div>
+  <div class="country-nav-inner" id="nav-pills"></div>
 </nav>
 
-<main id="main-content">
-  <div class="loading">
-    <div class="loading-spinner"></div>
-    <p>Chargement depuis Google Sheets...</p>
+<main>
+  <div class="sync-bar">
+    <div class="sync-info">Données : <span id="sync-status">chargement...</span></div>
+    <button class="sync-btn" id="sync-btn" onclick="loadFromSheet()">↻ Sync Google Sheet</button>
   </div>
+  <div id="main-content"></div>
 </main>
 
-<footer>
-  Événements incontournables en Europe · Données chargées depuis Google Sheets · <span id="last-updated"></span>
-</footer>
+<footer>Événements incontournables en Europe · <span id="last-updated"></span></footer>
 
 <script>
-  // ============================================================
-  // 👇 COLLE ICI TON LIEN CSV GOOGLE SHEETS
-  // Fichier > Partager > Publier sur le web > Format CSV > Copier le lien
-  // ============================================================
-  const SHEET_CSV_URL = 'https://corsproxy.io/?url=https://docs.google.com/spreadsheets/d/1g5ktsw_kXhqXKa1DDD8Q_cCODGss2vUMh1y15bh9LVs/export?format=csv&gid=0';
-  // ============================================================
+const SHEET_ID = '1g5ktsw_kXhqXKa1DDD8Q_cCODGss2vUMh1y15bh9LVs';
+const ACCENTS = {
+  fr:'#3b82f6', es:'#ef4444', pt:'#16a34a', be:'#f59e0b',
+  de:'#6366f1', cz:'#06b6d4', gb:'#ec4899', ie:'#22c55e',
+  nl:'#f97316', hr:'#8b5cf6', it:'#10b981', hu:'#ef4444',
+  fi:'#3b82f6', ro:'#f59e0b'
+};
 
-  // Mapping code pays -> couleur accent CSS
-  const ACCENTS = {
-    fr:'#3b82f6', es:'#ef4444', pt:'#16a34a', be:'#f59e0b',
-    de:'#6366f1', cz:'#06b6d4', gb:'#ec4899', ie:'#22c55e',
-    nl:'#f97316', hr:'#8b5cf6', it:'#10b981', hu:'#ef4444',
-    fi:'#3b82f6', ro:'#f59e0b'
-  };
+// Données embarquées (fallback)
+const EMBEDDED_DATA = [
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Nîmes',titre:'Festival de Nîmes',description:'Sting, Lorde, Nick Cave, The Cure - concerts aux Arènes romaines',dates:'11 juin - 26 juil. 2026',lien:'https://festivaldenimes.com',saison:'été'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Avignon',titre:"Festival d'Avignon",description:'80e édition - le plus grand festival de théâtre au monde - Palais des Papes',dates:'4 - 26 juil. 2026',lien:'https://festival-avignon.com',saison:'été'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Bayonne',titre:'Fêtes de Bayonne',description:'Blanc et rouge - bandas - corridas - 5 nuits sans sommeil',dates:'15 - 19 juil. 2026',lien:'https://fetes.bayonne.fr',saison:'été'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Lorient',titre:'Festival Interceltique',description:'800 000 personnes - 10 nations celtes - Cornouailles invitée',dates:'31 juil. - 9 août 2026',lien:'https://www.festival-interceltique.bzh',saison:'été'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Paris - Montmartre',titre:'Fête des Vendanges de Montmartre',description:'93e édition - défilé - dégustations - concerts dans les rues du 18e',dates:'7 - 11 oct. 2026',lien:'https://www.fetedesvendangesdemontmartre.com',saison:'automne'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Lyon',titre:'Festival Lumière',description:'Le plus grand festival de cinéma classique au monde - Prix Lumière aux frères Coen',dates:'10 - 18 oct. 2026',lien:'https://www.festival-lumiere.org',saison:'automne'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Rennes',titre:'Trans Musicales de Rennes',description:'Le festival qui a lancé Nirvana - Björk et Daft Punk',dates:'2 - 6 déc. 2026',lien:'https://www.lestrans.com',saison:'hiver'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Strasbourg',titre:'Marché de Noël Christkindelsmärik',description:'Depuis 1570 - le plus ancien marché de Noël de France',dates:'28 nov. - 24 déc. 2026',lien:'https://noel.strasbourg.eu',saison:'hiver'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Lyon',titre:'Fête des Lumières',description:'3 millions de visiteurs en 4 nuits - installations lumineuses gratuites',dates:'5 - 8 déc. 2026',lien:'https://www.fetedeslumieres.lyon.fr',saison:'hiver'},
+  {pays:'France',drapeau:'🇫🇷',code_pays:'fr',ville:'Nice',titre:'Carnaval de Nice',description:"L'un des 3 plus grands carnavals au monde - batailles de fleurs - chars géants",dates:'fév. 2027',lien:'https://www.nicecarnaval.com',saison:'hiver'},
+  {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Pampelune',titre:'San Fermín',description:'Encierros quotidiens - foulards rouges - 3 millions de visiteurs',dates:'6 - 14 juil. 2026',lien:'https://www.sanfermin.com',saison:'été'},
+  {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Buñol',titre:'La Tomatina',description:'La plus grande bataille de nourriture au monde - 150 tonnes de tomates',dates:'26 août 2026',lien:'https://www.latomatina.info',saison:'été'},
+  {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Séville',titre:'Bienal de Flamenco',description:'Le plus grand événement flamenco au monde - 72 spectacles (tous les 2 ans)',dates:'9 sept. - 3 oct. 2026',lien:'https://www.labienal.com',saison:'automne'},
+  {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Barcelone',titre:'La Mercè',description:'500 activités gratuites - correfoc - castellers - Piromusical à Font Màgica',dates:'23 - 27 sept. 2026',lien:'https://barcelona.cat/lamerce',saison:'automne'},
+  {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Valence',titre:'Las Fallas',description:'Patrimoine UNESCO - géants en papier mâché brûlés dans les rues',dates:'15 - 19 mars 2027',lien:'https://www.visitvalencia.com',saison:'printemps'},
+  {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Alicante',titre:'Hogueras de San Juan',description:'Bûchers monumentaux de 20 mètres - nuit de feu',dates:'20 - 24 juin 2027',lien:'https://www.alicanteturismo.com',saison:'été'},
+  {pays:'Espagne',drapeau:'🇪🇸',code_pays:'es',ville:'Grenade',titre:'Festival Internacional de Música y Danza',description:"Concerts dans l'Alhambra et le Généralife illuminés",dates:'fin juin 2027',lien:'https://granadafestival.org',saison:'été'},
+  {pays:'Portugal',drapeau:'🇵🇹',code_pays:'pt',ville:'Porto',titre:'Festa de São João',description:'La nuit la plus folle de l\'année - sardines - marteaux - feux d\'artifice sur le Douro',dates:'23 - 24 juin 2027',lien:'https://www.visitporto.travel',saison:'été'},
+  {pays:'Belgique',drapeau:'🇧🇪',code_pays:'be',ville:'Boom',titre:'Tomorrowland',description:'Le festival électronique le plus iconique au monde',dates:'17-19 et 24-26 juil. 2026',lien:'https://www.tomorrowland.com',saison:'été'},
+  {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Munich',titre:'Oktoberfest',description:'La plus grande fête populaire au monde - 6 millions de visiteurs',dates:'19 sept. - 4 oct. 2026',lien:'https://www.oktoberfest.de',saison:'automne'},
+  {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Nuremberg',titre:'Christkindlesmarkt',description:'Le marché de Noël le plus célèbre au monde - depuis le XVIe siècle',dates:'27 nov. - 24 déc. 2026',lien:'https://www.christkindlesmarkt.de',saison:'hiver'},
+  {pays:'Allemagne',drapeau:'🇩🇪',code_pays:'de',ville:'Cologne',titre:'Karneval de Cologne',description:'1 million de personnes dans les rues - le plus grand carnaval d\'Allemagne',dates:'4 - 10 fév. 2027',lien:'https://www.cologne-tourism.com/experiences-lifestyle/carnival',saison:'hiver'},
+  {pays:'République tchèque',drapeau:'🇨🇿',code_pays:'cz',ville:'Prague',titre:'Marché de Noël de la Vieille Ville',description:"L'un des plus beaux marchés de Noël d'Europe",dates:'28 nov. 2026 - 6 jan. 2027',lien:'https://www.pragueexperience.com/events/christmas-markets.asp',saison:'hiver'},
+  {pays:'Royaume-Uni',drapeau:'🇬🇧',code_pays:'gb',ville:'Édimbourg',titre:'Edinburgh Festival Fringe',description:'Le plus grand festival d\'arts au monde - 3 600 spectacles',dates:'7 - 31 août 2026',lien:'https://www.edfringe.com',saison:'été'},
+  {pays:'Royaume-Uni',drapeau:'🇬🇧',code_pays:'gb',ville:'Londres',titre:'Notting Hill Carnival',description:"Le plus grand carnaval d'Europe - 2 millions de personnes",dates:'30 - 31 août 2026',lien:'https://nhcarnival.org',saison:'été'},
+  {pays:'Royaume-Uni',drapeau:'🇬🇧',code_pays:'gb',ville:'Édimbourg',titre:'Hogmanay',description:'Le réveillon le plus iconique au monde - 45 000 personnes',dates:'29 déc. 2026 - 1 jan. 2027',lien:'https://edinburgh.org/festivals/edinburghs-hogmanay/',saison:'hiver'},
+  {pays:'Irlande',drapeau:'🇮🇪',code_pays:'ie',ville:'Dublin',titre:"St. Patrick's Day",description:'Défilés - Guinness - tout le pays en vert',dates:'17 mars 2027',lien:'https://www.stpatricksfestival.ie',saison:'printemps'},
+  {pays:'Pays-Bas',drapeau:'🇳🇱',code_pays:'nl',ville:'Amsterdam',titre:'Amsterdam Dance Event (ADE)',description:'30e anniversaire - 1 200 événements - 2 500 artistes dans 300 lieux',dates:'21 - 25 oct. 2026',lien:'https://www.amsterdam-dance-event.nl',saison:'automne'},
+  {pays:'Pays-Bas',drapeau:'🇳🇱',code_pays:'nl',ville:'Amsterdam',titre:'Amsterdam Light Festival',description:'Installations lumineuses sur les canaux - gratuit à pied',dates:'26 nov. 2026 - 17 jan. 2027',lien:'https://www.amsterdamlightfestival.com',saison:'hiver'},
+  {pays:'Pays-Bas',drapeau:'🇳🇱',code_pays:'nl',ville:'Amsterdam',titre:"King's Day",description:'800 000 personnes en orange - bateaux sur les canaux',dates:'27 avr. 2027',lien:'https://www.iamsterdam.com/en/whats-on/kings-day',saison:'printemps'},
+  {pays:'Croatie',drapeau:'🇭🇷',code_pays:'hr',ville:'Dubrovnik',titre:'Dubrovnik Summer Festival',description:'Théâtre - musique classique et ballet dans les remparts médiévaux',dates:'10 juil. - 25 août 2026',lien:'https://www.dubrovnik-festival.hr/en',saison:'été'},
+  {pays:'Italie',drapeau:'🇮🇹',code_pays:'it',ville:'Sienne',titre:'Palio di Siena',description:'Course de chevaux médiévale dans la Piazza del Campo',dates:'2 juil. et 16 août 2026',lien:'https://www.ilpalio.org',saison:'été'},
+  {pays:'Italie',drapeau:'🇮🇹',code_pays:'it',ville:'Bergame',titre:'Bergamo Jazz Estate',description:'Dee Dee Bridgewater & Fatoumata Diawara au Lazaretto',dates:'2 - 18 juil. 2026',lien:'https://www.bergamojazz.org/en/',saison:'été'},
+  {pays:'Italie',drapeau:'🇮🇹',code_pays:'it',ville:'Venise',titre:'Carnaval de Venise',description:"L'un des plus vieux et plus beaux carnavals au monde",dates:'30 jan. - 9 fév. 2027',lien:'https://carnevale.venezia.it/en/',saison:'hiver'},
+  {pays:'Hongrie',drapeau:'🇭🇺',code_pays:'hu',ville:'Budapest',titre:'Sziget Festival',description:"L'île de la liberté - 550 000 festivaliers - 50 scènes",dates:'11 - 15 août 2026',lien:'https://szigetfestival.com',saison:'été'},
+  {pays:'Finlande',drapeau:'🇫🇮',code_pays:'fi',ville:'Helsinki',titre:'Helsinki Festival',description:'3 semaines de musique - danse - opéra et arts dans toute la ville',dates:'18 août - 5 sept. 2026',lien:'https://helsinkifestival.fi/en/',saison:'été'},
+  {pays:'Roumanie',drapeau:'🇷🇴',code_pays:'ro',ville:'Bucarest',titre:'Untold Festival',description:"400 000 festivaliers - l'un des plus grands festivals d'Europe de l'Est",dates:'6 - 9 août 2026',lien:'https://untoldfestival.com',saison:'été'},
+];
 
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-    return lines.slice(1).map(line => {
-      // Gestion des virgules dans les champs entre guillemets
-      const values = [];
-      let current = '';
-      let inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        if (line[i] === '"') { inQuotes = !inQuotes; }
-        else if (line[i] === ',' && !inQuotes) { values.push(current.trim()); current = ''; }
-        else { current += line[i]; }
-      }
-      values.push(current.trim());
-      const obj = {};
-      headers.forEach((h, i) => obj[h] = (values[i] || '').replace(/^"|"$/g, '').trim());
-      return obj;
-    }).filter(row => row.pays && row.titre);
-  }
+function slugify(str) {
+  return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+}
 
-  function slugify(str) {
-    return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-  }
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
+  return lines.slice(1).map(line => {
+    const values = []; let current = ''; let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      if (line[i] === '"') { inQuotes = !inQuotes; }
+      else if (line[i] === ',' && !inQuotes) { values.push(current.trim()); current = ''; }
+      else { current += line[i]; }
+    }
+    values.push(current.trim());
+    const obj = {};
+    headers.forEach((h,i) => obj[h] = (values[i]||'').replace(/^"|"$/g,'').trim());
+    return obj;
+  }).filter(r => r.pays && r.titre);
+}
 
-  function buildPage(rows) {
-    const main = document.getElementById('main-content');
-    const navPills = document.getElementById('nav-pills');
-    main.innerHTML = '';
-    navPills.innerHTML = '';
+function buildPage(rows, source) {
+  const main = document.getElementById('main-content');
+  const navPills = document.getElementById('nav-pills');
+  main.innerHTML = ''; navPills.innerHTML = '';
 
-    // Regrouper par pays (en préservant l'ordre d'apparition)
-    const countries = {};
-    const countryOrder = [];
-    rows.forEach(row => {
-      const key = row.pays.trim();
-      if (!countries[key]) { countries[key] = []; countryOrder.push(key); }
-      countries[key].push(row);
-    });
+  const countries = {}; const countryOrder = [];
+  rows.forEach(row => {
+    const key = row.pays.trim();
+    if (!countries[key]) { countries[key] = []; countryOrder.push(key); }
+    countries[key].push(row);
+  });
 
-    // Stats
-    document.getElementById('stat-pays').textContent = countryOrder.length;
-    document.getElementById('stat-events').textContent = rows.length;
-    document.getElementById('last-updated').textContent = 'Chargé le ' + new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  document.getElementById('stat-pays').textContent = countryOrder.length;
+  document.getElementById('stat-events').textContent = rows.length;
+  document.getElementById('sync-status').textContent = source;
+  document.getElementById('last-updated').textContent = 'Mis à jour le ' + new Date().toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'});
 
-    // Vérifier si l'URL est encore le placeholder
-    if (SHEET_CSV_URL === 'COLLE_TON_LIEN_CSV_ICI') { return; }
+  countryOrder.forEach(pays => {
+    const pill = document.createElement('a');
+    pill.className = 'nav-pill';
+    pill.href = '#' + slugify(pays);
+    pill.textContent = (countries[pays][0].drapeau||'') + ' ' + pays;
+    navPills.appendChild(pill);
+  });
 
-    // Nav pills
-    countryOrder.forEach(pays => {
-      const firstRow = countries[pays][0];
-      const pill = document.createElement('a');
-      pill.className = 'nav-pill';
-      pill.href = '#' + slugify(pays);
-      pill.textContent = (firstRow.drapeau || '') + ' ' + pays;
-      navPills.appendChild(pill);
-    });
+  countryOrder.forEach(pays => {
+    const events = countries[pays];
+    const code = (events[0].code_pays||pays.slice(0,2)).toLowerCase();
+    const accent = ACCENTS[code] || '#c9a84c';
 
-    // Sections par pays
-    countryOrder.forEach(pays => {
-      const events = countries[pays];
-      const firstRow = events[0];
-      const code = (firstRow.code_pays || pays.slice(0,2)).toLowerCase();
-      const accent = ACCENTS[code] || '#c9a84c';
-      const id = slugify(pays);
-
-      const section = document.createElement('section');
-      section.className = 'country-section';
-      section.id = id;
-
-      section.innerHTML = `
-        <div class="country-header">
-          <span class="country-flag">${firstRow.drapeau || ''}</span>
-          <span class="country-name">${pays}</span>
-          <span class="country-count">${events.length} événement${events.length > 1 ? 's' : ''}</span>
-        </div>
-        <div class="events-grid">
-          ${events.map(ev => {
-            const saison = (ev.saison || '').toLowerCase();
-            const href = ev.lien ? (ev.lien.startsWith('http') ? ev.lien : 'https://' + ev.lien) : '#';
-            return `
-              <a class="event-card" href="${href}" target="_blank" style="--accent: ${accent}">
-                <div class="event-left">
-                  <div class="event-meta">
-                    <span class="event-city" style="color:${accent}">${ev.ville || ''}</span>
-                    ${saison ? `<span class="event-dot"></span><span class="season-badge badge-${saison}">${ev.saison}</span>` : ''}
-                  </div>
-                  <div class="event-title">${ev.titre || ''}</div>
-                  <div class="event-desc">${ev.description || ''}</div>
-                </div>
-                <div class="event-right">
-                  <div class="event-date">${ev.dates || ''}</div>
-                  <div class="event-link-icon">→</div>
-                </div>
-              </a>
-            `;
-          }).join('')}
-        </div>
-      `;
-      main.appendChild(section);
-    });
-  }
-
-  function showConfigBanner() {
-    const main = document.getElementById('main-content');
-    main.innerHTML = `
-      <div class="config-banner">
-        <div class="config-icon">⚙️</div>
-        <div class="config-text">
-          <strong>Configuration requise</strong>
-          <p>Ouvre ce fichier HTML dans un éditeur, et remplace la valeur de <code>SHEET_CSV_URL</code> par ton lien CSV Google Sheets.</p>
-          <p style="margin-top:8px">Dans Google Sheets : <strong>Fichier → Partager → Publier sur le web → Format CSV → Copier le lien</strong></p>
-          <p style="margin-top:8px">Colonnes attendues : <code>pays, drapeau, code_pays, ville, titre, description, dates, lien, saison</code></p>
-        </div>
+    const section = document.createElement('section');
+    section.className = 'country-section';
+    section.id = slugify(pays);
+    section.innerHTML = `
+      <div class="country-header">
+        <span class="country-flag">${events[0].drapeau||''}</span>
+        <span class="country-name">${pays}</span>
+        <span class="country-count">${events.length} événement${events.length>1?'s':''}</span>
       </div>
-    `;
-  }
+      <div class="events-grid">
+        ${events.map(ev => {
+          const saison = (ev.saison||'').toLowerCase();
+          const href = ev.lien ? (ev.lien.startsWith('http') ? ev.lien : 'https://'+ev.lien) : '#';
+          return `<a class="event-card" href="${href}" target="_blank" style="--accent:${accent}">
+            <div class="event-left">
+              <div class="event-meta">
+                <span class="event-city" style="color:${accent}">${ev.ville||''}</span>
+                ${saison?`<span class="event-dot"></span><span class="season-badge badge-${saison}">${ev.saison}</span>`:''}
+              </div>
+              <div class="event-title">${ev.titre||''}</div>
+              <div class="event-desc">${ev.description||''}</div>
+            </div>
+            <div class="event-right">
+              <div class="event-date">${ev.dates||''}</div>
+              <div class="event-link-icon">→</div>
+            </div>
+          </a>`;
+        }).join('')}
+      </div>`;
+    main.appendChild(section);
+  });
+}
 
-  async function loadData() {
-    if (SHEET_CSV_URL === 'COLLE_TON_LIEN_CSV_ICI') {
-      showConfigBanner();
-      return;
-    }
-
+async function loadFromSheet() {
+  const btn = document.getElementById('sync-btn');
+  btn.disabled = true; btn.textContent = '↻ Sync en cours...';
+  const proxies = [
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`)}`,
+    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`)}`,
+  ];
+  for (const url of proxies) {
     try {
-      // Ajout d'un timestamp pour éviter le cache
-      const url = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
       const res = await fetch(url);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      if (!res.ok) continue;
       const text = await res.text();
+      if (!text.includes('pays')) continue;
       const rows = parseCSV(text);
-      if (rows.length === 0) throw new Error('Aucune donnée trouvée dans le sheet');
-      buildPage(rows);
-    } catch (err) {
-      document.getElementById('main-content').innerHTML = `
-        <div class="error-block">
-          <div style="font-size:32px;margin-bottom:12px">⚠️</div>
-          <strong>Impossible de charger les données</strong>
-          <p style="margin-top:8px;font-size:13px">Vérifie que ton Google Sheet est bien publié en accès CSV public.</p>
-          <code>${err.message}</code>
-        </div>
-      `;
-    }
+      if (rows.length > 0) {
+        buildPage(rows, '✓ Google Sheet (live)');
+        btn.disabled = false; btn.textContent = '↻ Sync Google Sheet';
+        return;
+      }
+    } catch(e) { continue; }
   }
+  btn.disabled = false; btn.textContent = '↻ Sync Google Sheet';
+  document.getElementById('sync-status').textContent = '⚠ Sheet inaccessible - données locales';
+}
 
-  loadData();
+// Charger les données embarquées immédiatement
+buildPage(EMBEDDED_DATA, 'données locales');
+// Tenter la sync en arrière-plan
+loadFromSheet();
 </script>
 </body>
 </html>
