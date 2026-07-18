@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Événements Incontournables en Europe</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --night: #0d0f14; --deep: #13161e; --card: #1a1e28; --border: #252a38;
+    --gold: #c9a84c; --gold-light: #e8c96d; --text: #e8e4dc; --muted: #7a8099;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--night); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; }
+
+  .hero {
+    background: linear-gradient(160deg, #0d0f14 0%, #1a1428 50%, #0d1520 100%);
+    padding: 80px 24px 60px; text-align: center; border-bottom: 1px solid var(--border); position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%); pointer-events: none;
+  }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 72px); font-weight: 700; line-height: 1.1; color: var(--text); max-width: 800px; margin: 0 auto 16px; }
+  .hero h1 em { font-style: italic; color: var(--gold-light); }
+  .hero-sub { color: var(--muted); font-size: 15px; font-weight: 300; max-width: 500px; margin: 0 auto; }
+  .hero-stats { display: flex; justify-content: center; gap: 40px; margin-top: 40px; flex-wrap: wrap; }
+  .stat { text-align: center; }
+  .stat-n { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--gold); line-height: 1; }
+  .stat-l { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-top: 4px; }
+
+  .country-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,15,20,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none;
+  }
+  .country-nav::-webkit-scrollbar { display: none; }
+  .country-nav-inner { display: flex; gap: 4px; padding: 12px 24px; min-width: max-content; }
+  .nav-pill {
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
+    cursor: pointer; border: 1px solid var(--border); background: transparent;
+    color: var(--muted); text-decoration: none; transition: all 0.15s; white-space: nowrap;
+  }
+  .nav-pill:hover { border-color: var(--gold); color: var(--gold); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+
+  /* LOADING */
+  .loading {
+    text-align: center; padding: 80px 24px; color: var(--muted);
+  }
+  .loading-spinner {
+    width: 36px; height: 36px; border: 2px solid var(--border);
+    border-top-color: var(--gold); border-radius: 50%;
+    animation: spin 0.8s linear infinite; margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ERROR */
+  .error-block {
+    background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px; padding: 24px; text-align: center; color: #fca5a5;
+  }
+  .error-block code { font-size: 12px; color: var(--muted); display: block; margin-top: 8px; }
+
+  /* CONFIG BANNER */
+  .config-banner {
+    background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 40px;
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .config-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+  .config-text { flex: 1; }
+  .config-text strong { color: var(--gold); display: block; margin-bottom: 4px; }
+  .config-text p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .config-text code {
+    font-size: 11px; background: rgba(255,255,255,0.05);
+    padding: 2px 6px; border-radius: 4px; color: var(--gold-light);
+    word-break: break-all;
+  }
+
+  /* COUNTRY SECTIONS */
+  .country-section { margin-bottom: 64px; }
+  .country-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+  }
+  .country-flag { font-size: 28px; line-height: 1; }
+  .country-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; }
+  .country-count { margin-left: auto; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+
+  .events-grid { display: grid; gap: 12px; }
+
+  .event-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px 24px; display: grid; grid-template-columns: 1fr auto;
+    gap: 12px; align-items: center; text-decoration: none; color: inherit;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    position: relative; overflow: hidden;
+  }
+  .event-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--accent, var(--gold)); opacity: 0; transition: opacity 0.15s;
+  }
+  .event-card:hover { border-color: rgba(201,168,76,0.3); background: #1e2330; transform: translateX(2px); }
+  .event-card:hover::before { opacity: 1; }
+
+  .event-left { min-width: 0; }
+  .event-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .event-city { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; }
+  .event-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
+  .event-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .event-desc { font-size: 13px; color: var(--muted); font-weight: 300; }
+
+  .event-right { text-align: right; flex-shrink: 0; }
+  .event-date { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; }
+  .event-link-icon { display: inline-block; margin-top: 8px; font-size: 18px; opacity: 0.3; transition: opacity 0.15s; }
+  .event-card:hover .event-link-icon { opacity: 0.9; }
+
+  .season-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .badge-été    { background: rgba(251,191,36,0.12);  color: #fbbf24; }
+  .badge-automne{ background: rgba(234,88,12,0.12);   color: #ea580c; }
+  .badge-hiver  { background: rgba(96,165,250,0.12);  color: #60a5fa; }
+  .badge-printemps{ background: rgba(34,197,94,0.12); color: #22c55e; }
+
+  /* Palette couleurs par pays */
+  .accent-fr { color: #3b82f6; } .accent-es { color: #ef4444; } .accent-pt { color: #16a34a; }
+  .accent-be { color: #f59e0b; } .accent-de { color: #6366f1; } .accent-cz { color: #06b6d4; }
+  .accent-gb { color: #ec4899; } .accent-ie { color: #22c55e; } .accent-nl { color: #f97316; }
+  .accent-hr { color: #8b5cf6; } .accent-it { color: #10b981; } .accent-hu { color: #ef4444; }
+  .accent-fi { color: #3b82f6; } .accent-ro { color: #f59e0b; }
+
+  footer { border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; color: var(--muted); font-size: 12px; }
+
+  @media (max-width: 600px) {
+    .event-card { grid-template-columns: 1fr; }
+    .event-right { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">Guide Personnel</div>
+  <h1>Événements <em>Incontournables</em> en Europe</h1>
+  <p class="hero-sub">Les rendez-vous qui valent le voyage - mis à jour depuis Google Sheets</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-n" id="stat-pays">-</div><div class="stat-l">Pays</div></div>
+    <div class="stat"><div class="stat-n" id="stat-events">-</div><div class="stat-l">Événements</div></div>
+  </div>
+</div>
+
+<nav class="country-nav">
+  <div class="country-nav-inner" id="nav-pills">
+    <!-- Généré dynamiquement -->
+  </div>
+</nav>
+
+<main id="main-content">
+  <div class="loading">
+    <div class="loading-spinner"></div>
+    <p>Chargement depuis Google Sheets...</p>
+  </div>
+</main>
+
+<footer>
+  Événements incontournables en Europe · Données chargées depuis Google Sheets · <span id="last-updated"></span>
+</footer>
+
+<script>
+  // ============================================================
+  // 👇 COLLE ICI TON LIEN CSV GOOGLE SHEETS
+  // Fichier > Partager > Publier sur le web > Format CSV > Copier le lien
+  // ============================================================
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1g5ktsw_kXhqXKa1DDD8Q_cCODGss2vUMh1y15bh9LVs/export?format=csv&gid=0';
+  // ============================================================
+
+  // Mapping code pays -> couleur accent CSS
+  const ACCENTS = {
+    fr:'#3b82f6', es:'#ef4444', pt:'#16a34a', be:'#f59e0b',
+    de:'#6366f1', cz:'#06b6d4', gb:'#ec4899', ie:'#22c55e',
+    nl:'#f97316', hr:'#8b5cf6', it:'#10b981', hu:'#ef4444',
+    fi:'#3b82f6', ro:'#f59e0b'
+  };
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+    return lines.slice(1).map(line => {
+      // Gestion des virgules dans les champs entre guillemets
+      const values = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        if (line[i] === '"') { inQuotes = !inQuotes; }
+        else if (line[i] === ',' && !inQuotes) { values.push(current.trim()); current = ''; }
+        else { current += line[i]; }
+      }
+      values.push(current.trim());
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = (values[i] || '').replace(/^"|"$/g, '').trim());
+      return obj;
+    }).filter(row => row.pays && row.titre);
+  }
+
+  function slugify(str) {
+    return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  }
+
+  function buildPage(rows) {
+    const main = document.getElementById('main-content');
+    const navPills = document.getElementById('nav-pills');
+    main.innerHTML = '';
+    navPills.innerHTML = '';
+
+    // Regrouper par pays (en préservant l'ordre d'apparition)
+    const countries = {};
+    const countryOrder = [];
+    rows.forEach(row => {
+      const key = row.pays.trim();
+      if (!countries[key]) { countries[key] = []; countryOrder.push(key); }
+      countries[key].push(row);
+    });
+
+    // Stats
+    document.getElementById('stat-pays').textContent = countryOrder.length;
+    document.getElementById('stat-events').textContent = rows.length;
+    document.getElementById('last-updated').textContent = 'Chargé le ' + new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    // Vérifier si l'URL est encore le placeholder
+    if (SHEET_CSV_URL === 'COLLE_TON_LIEN_CSV_ICI') { return; }
+
+    // Nav pills
+    countryOrder.forEach(pays => {
+      const firstRow = countries[pays][0];
+      const pill = document.createElement('a');
+      pill.className = 'nav-pill';
+      pill.href = '#' + slugify(pays);
+      pill.textContent = (firstRow.drapeau || '') + ' ' + pays;
+      navPills.appendChild(pill);
+    });
+
+    // Sections par pays
+    countryOrder.forEach(pays => {
+      const events = countries[pays];
+      const firstRow = events[0];
+      const code = (firstRow.code_pays || pays.slice(0,2)).toLowerCase();
+      const accent = ACCENTS[code] || '#c9a84c';
+      const id = slugify(pays);
+
+      const section = document.createElement('section');
+      section.className = 'country-section';
+      section.id = id;
+
+      section.innerHTML = `
+        <div class="country-header">
+          <span class="country-flag">${firstRow.drapeau || ''}</span>
+          <span class="country-name">${pays}</span>
+          <span class="country-count">${events.length} événement${events.length > 1 ? 's' : ''}</span>
+        </div>
+        <div class="events-grid">
+          ${events.map(ev => {
+            const saison = (ev.saison || '').toLowerCase();
+            const href = ev.lien ? (ev.lien.startsWith('http') ? ev.lien : 'https://' + ev.lien) : '#';
+            return `
+              <a class="event-card" href="${href}" target="_blank" style="--accent: ${accent}">
+                <div class="event-left">
+                  <div class="event-meta">
+                    <span class="event-city" style="color:${accent}">${ev.ville || ''}</span>
+                    ${saison ? `<span class="event-dot"></span><span class="season-badge badge-${saison}">${ev.saison}</span>` : ''}
+                  </div>
+                  <div class="event-title">${ev.titre || ''}</div>
+                  <div class="event-desc">${ev.description || ''}</div>
+                </div>
+                <div class="event-right">
+                  <div class="event-date">${ev.dates || ''}</div>
+                  <div class="event-link-icon">→</div>
+                </div>
+              </a>
+            `;
+          }).join('')}
+        </div>
+      `;
+      main.appendChild(section);
+    });
+  }
+
+  function showConfigBanner() {
+    const main = document.getElementById('main-content');
+    main.innerHTML = `
+      <div class="config-banner">
+        <div class="config-icon">⚙️</div>
+        <div class="config-text">
+          <strong>Configuration requise</strong>
+          <p>Ouvre ce fichier HTML dans un éditeur, et remplace la valeur de <code>SHEET_CSV_URL</code> par ton lien CSV Google Sheets.</p>
+          <p style="margin-top:8px">Dans Google Sheets : <strong>Fichier → Partager → Publier sur le web → Format CSV → Copier le lien</strong></p>
+          <p style="margin-top:8px">Colonnes attendues : <code>pays, drapeau, code_pays, ville, titre, description, dates, lien, saison</code></p>
+        </div>
+      </div>
+    `;
+  }
+
+  async function loadData() {
+    if (SHEET_CSV_URL === 'COLLE_TON_LIEN_CSV_ICI') {
+      showConfigBanner();
+      return;
+    }
+
+    try {
+      // Ajout d'un timestamp pour éviter le cache
+      const url = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      const rows = parseCSV(text);
+      if (rows.length === 0) throw new Error('Aucune donnée trouvée dans le sheet');
+      buildPage(rows);
+    } catch (err) {
+      document.getElementById('main-content').innerHTML = `
+        <div class="error-block">
+          <div style="font-size:32px;margin-bottom:12px">⚠️</div>
+          <strong>Impossible de charger les données</strong>
+          <p style="margin-top:8px;font-size:13px">Vérifie que ton Google Sheet est bien publié en accès CSV public.</p>
+          <code>${err.message}</code>
+        </div>
+      `;
+    }
+  }
+
+  loadData();
+</script>
+</body>
+</html>
